@@ -1,24 +1,49 @@
-variable "enabled" {
-  type        = bool
-  description = "Set to false to prevent the module from creating any resources"
-  default     = true
-}
-
 variable "namespace" {
   type        = string
-  description = "Namespace (_e.g._ `eg` or `cp`)"
   default     = ""
+  description = "Namespace, which could be your organization name or abbreviation, e.g. 'eg' or 'cp'"
+}
+
+variable "environment" {
+  type        = string
+  default     = ""
+  description = "Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT'"
 }
 
 variable "stage" {
   type        = string
-  description = "Stage (_e.g._ `prod`, `dev`, `staging`)"
   default     = ""
+  description = "Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release'"
 }
 
 variable "name" {
   type        = string
-  description = "Name (_e.g._ `app`)"
+  default     = ""
+  description = "Solution name, e.g. 'app' or 'jenkins'"
+}
+
+variable "enabled" {
+  type        = bool
+  default     = true
+  description = "Set to false to prevent the module from creating any resources"
+}
+
+variable "delimiter" {
+  type        = string
+  default     = "-"
+  description = "Delimiter to be used between `namespace`, `environment`, `stage`, `name` and `attributes`"
+}
+
+variable "attributes" {
+  type        = list(string)
+  default     = []
+  description = "Additional attributes (e.g. `1`)"
+}
+
+variable "tags" {
+  type        = map(string)
+  default     = {}
+  description = "Additional tags (e.g. `map('BusinessUnit','XYZ')`"
 }
 
 variable "security_groups" {
@@ -41,39 +66,22 @@ variable "subnets" {
   description = "Subnet IDs"
 }
 
-variable "availability_zones" {
-  type        = list(string)
-  description = "Availability Zone IDs"
-}
-
 variable "zone_id" {
   type        = string
   description = "Route53 DNS zone ID"
   default     = ""
 }
 
-variable "delimiter" {
-  type        = string
-  description = "Delimiter to be used between `namespace`, `stage`, `name` and `attributes`"
-  default     = "-"
-}
-
-variable "attributes" {
-  type        = list(string)
-  description = "Additional attributes (e.g. `1`)"
-  default     = []
-}
-
-variable "tags" {
-  type        = map(string)
-  description = "Additional tags (e.g. `{ BusinessUnit = \"XYZ\" }`"
-  default     = {}
-}
-
 variable "encrypted" {
   type        = bool
   description = "If true, the file system will be encrypted"
   default     = false
+}
+
+variable "kms_key_id" {
+  type        = string
+  description = "If set, use a specific KMS key"
+  default     = null
 }
 
 variable "performance_mode" {
@@ -102,5 +110,11 @@ variable "mount_target_ip_address" {
 variable "dns_name" {
   type        = string
   description = "Name of the CNAME record to create"
+  default     = ""
+}
+
+variable "transition_to_ia" {
+  type        = string
+  description = "Indicates how long it takes to transition files to the IA storage class. Valid values: AFTER_7_DAYS, AFTER_14_DAYS, AFTER_30_DAYS, AFTER_60_DAYS and AFTER_90_DAYS"
   default     = ""
 }
